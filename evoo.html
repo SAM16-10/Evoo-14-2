@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARWA 💖</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif;}
+body{
+  margin:0;
+  min-height:100vh;
+  background:url("bg.jpg") center/cover no-repeat fixed;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+}
+.overlay{
+  background:rgba(0,0,0,0.6);
+  padding:25px;
+  border-radius:20px;
+  width:90%;
+  max-width:380px;
+  text-align:center;
+}
+button{
+  margin-top:15px;
+  padding:12px 25px;
+  border:none;
+  border-radius:25px;
+  background:#ff4d8d;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+.hidden{display:none;}
+img{
+  width:100%;
+  border-radius:15px;
+  margin-top:10px;
+}
+#typeText{min-height:90px;}
+</style>
+</head>
+
+<body>
+
+<!-- PASSWORD -->
+<div class="overlay" id="passwordScreen">
+  <h2>🔒 Private Birthday Page</h2>
+  <p>Enter the secret code</p>
+  <input type="password" id="passInput" placeholder="Password"
+   style="width:100%;padding:10px;border-radius:20px;border:none;">
+  <button onclick="checkPass()">Enter 💕</button>
+  <p id="error" style="color:#ff9aa2;display:none;">Wrong password 💔</p>
+</div>
+
+<!-- INTRO -->
+<div class="overlay hidden" id="intro">
+  <h2>ARWA 💖</h2>
+  <p id="typeText"></p>
+  <button onclick="showGallery()">Next 💕</button>
+</div>
+
+<!-- GALLERY -->
+<div class="overlay hidden" id="gallery">
+  <p id="imgText"></p>
+  <img id="galleryImg" src="img1.jpg">
+  <button onclick="nextImg()">Next 💕</button>
+</div>
+
+<!-- END -->
+<div class="overlay hidden" id="end">
+  <h2>Happy Birthday & Happy Valentine’s Day 🎂💘</h2>
+  <p>
+    You are growing into someone truly special,  
+    and I’m grateful to celebrate both your birthday  
+    and this day of love with you.  
+    May every year add more happiness to your life. 💖
+  </p>
+  <p id="counter"></p>
+</div>
+
+<audio id="music" src="music.mp3"></audio>
+
+<script>
+const PASSWORD = "1402";
+const birthDate = new Date("2007-02-14T00:12:00");
+
+const introMessage =
+"Happy Birthday, Arwa 🎂💖\nAnd Happy Valentine’s Day.\nYou are more than just a best friend — you are a blessing in my life.\nToday we celebrate you and the love you bring into this world.";
+
+const imgMessages = [
+  "Your smile deserves the whole universe ✨",
+  "Another year more beautiful than the last 💕",
+  "May your dreams grow bigger every year 🌙",
+  "Stay kind, stay strong, stay you 💖",
+  "You make life brighter just by being in it ☀️",
+  "Forever proud of you, always by your side 💞"
+];
+
+let index = 1;
+let typeIndex = 0;
+
+function checkPass(){
+  if(document.getElementById("passInput").value === PASSWORD){
+    document.getElementById("passwordScreen").classList.add("hidden");
+    document.getElementById("intro").classList.remove("hidden");
+    document.getElementById("music").play();
+    typeIntro();
+  }else{
+    document.getElementById("error").style.display="block";
+  }
+}
+
+function typeIntro(){
+  if(typeIndex < introMessage.length){
+    document.getElementById("typeText").innerHTML += introMessage.charAt(typeIndex);
+    typeIndex++;
+    setTimeout(typeIntro,40);
+  }
+}
+
+function showGallery(){
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("gallery").classList.remove("hidden");
+  document.getElementById("imgText").innerText = imgMessages[0];
+}
+
+function nextImg(){
+  index++;
+  if(index <= 6){
+    document.getElementById("galleryImg").src = "img"+index+".jpg";
+    document.getElementById("imgText").innerText = imgMessages[index-1];
+  }else{
+    document.getElementById("gallery").classList.add("hidden");
+    document.getElementById("end").classList.remove("hidden");
+    startCounter();
+  }
+}
+
+function startCounter(){
+  setInterval(()=>{
+    const now = new Date();
+    let diff = now - birthDate;
+
+    const years = Math.floor(diff / (1000*60*60*24*365));
+    diff %= (1000*60*60*24*365);
+
+    const days = Math.floor(diff / (1000*60*60*24));
+    diff %= (1000*60*60*24);
+
+    const hours = Math.floor(diff / (1000*60*60));
+    diff %= (1000*60*60);
+
+    const minutes = Math.floor(diff / (1000*60));
+    const seconds = Math.floor((diff % (1000*60)) / 1000);
+
+    document.getElementById("counter").innerText =
+      `She is now ${years} years, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds old 💖`;
+  },1000);
+}
+</script>
+
+</body>
+</html>
